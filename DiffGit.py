@@ -1,14 +1,33 @@
 #!/usr/bin/env python3
 import subprocess
-#h
-def obtain_diff():
-    results = subprocess.run(
-        ["git", "diff", "--staged"],
-        capture_output=True,
-        text=True
-    )
-    return results.stdout
+import os
+import sys
+# def obtain_diff():
 
-if __name__ == "__main__":
-    diff = obtain_diff()
-    print(diff)
+#     results = subprocess.run(
+#         ["git", "diff", "--staged"],
+#         capture_output=True,
+#         text=True
+#     )
+#     return results.stdout
+
+# if __name__ == "__main__":
+#     diff = obtain_diff()
+#     print(diff)
+
+
+
+def obtain_diff():
+    Base_ref=os.getenv("BASE_REF") #For github Actions
+
+    if Base_ref:
+        command= ["git","diff",f"origin/{Base_ref}...HEAD"]
+    else:
+        command = ["git", "diff", "--staged"]
+    try:
+        resultado = subprocess.run(command, capture_output=True, text=True, check=True)
+        return resultado.stdout
+    except subprocess.CalledProcessError as e :
+        print(f"Error in git diff")
+        sys.exit(1)
+    
