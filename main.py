@@ -22,7 +22,7 @@ def Fast_Mode():
     data = parser_answer(crude_answer)
     Show_Comments(data)
     if Critical_error(data):
-        print("/n Critial error, aborting push")
+        print("\n Critial error, aborting push")
         sys.exit(1)
 
 def Auditory_Mode(rute):
