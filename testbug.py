@@ -10,3 +10,5 @@ Api_Anthropic="8279803719817298"
 
  if i  =  2 :
     True
+
+Gemini_api="ka98037122971908371982"
