@@ -19,9 +19,13 @@ import sys
 
 def obtain_diff():
     Base_ref=os.getenv("BASE_REF") #For github Actions
-
+    github_event = os.getenv("GITHUB_EVENT_NAME")
     if Base_ref:
+        #PullRequest
         command= ["git","diff",f"origin/{Base_ref}...HEAD"]
+    elif github_event == "push":
+        #Push
+        command = ["git", "diff", "HEAD~1", "HEAD"]
     else:
         command = ["git", "diff", "--staged"]
     try:
@@ -30,4 +34,3 @@ def obtain_diff():
     except subprocess.CalledProcessError as e :
         print(f"Error in git diff")
         sys.exit(1)
-    
