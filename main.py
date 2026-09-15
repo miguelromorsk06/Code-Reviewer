@@ -9,6 +9,9 @@ from DiffGit import obtain_diff
 from CallGemini import Review_Code
 from TerminalOutput import Show_Comments
 
+def Critical_error(data):
+    comments=data.get("Comments",[])
+    return any(c.get("severidad")=="Alta" for c in comments)
 def Fast_Mode():
     diff = obtain_diff()
     if not diff.strip():
@@ -18,6 +21,9 @@ def Fast_Mode():
     crude_answer = Review_Code(diff,Fast_promt)
     data = parser_answer(crude_answer)
     Show_Comments(data)
+    if Critical_error(data):
+        print("/n Critial error, aborting push")
+        sys.exit(1)
 
 def Auditory_Mode(rute):
     code=read_rute(rute)
