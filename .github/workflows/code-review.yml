@@ -3,7 +3,8 @@ name: Code-Reviewer
 on:
   pull_request:
     types: [opened, synchronize]
-
+  push:
+    branches: [main]
 jobs:
   review:
     runs-on: ubuntu-latest
@@ -23,6 +24,6 @@ jobs:
 
       - name: Run AI Code Review
         env:
-          GEMINI_API_KEYç: ${{ secrets.GEMINI_API_KEY }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           BASE_REF: ${{ github.event.pull_request.base.ref }}
         run: python main.py
