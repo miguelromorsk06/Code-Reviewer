@@ -11,7 +11,7 @@ from TerminalOutput import Show_Comments
 
 def Critical_error(data):
     comments=data.get("Comments",[])
-    return any(c.get("severidad")=="Alta" for c in comments)
+    return any(c.get("severidad")=="ALTA" for c in comments)
 def Fast_Mode():
     diff = obtain_diff()
     if not diff.strip():
