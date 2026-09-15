@@ -1,12 +1,12 @@
 #!usr/bin/env python3
 from google import genai
-from Promts import Fast_promt
-
 client=genai.Client()
-def Review_Code(code):
+
+
+def Review_Code(code,Use_promt):
     answer= client.models.generate_content(
         model="gemini-3.6-flash",
-        contents=Fast_promt.format(diff=code),
+        contents=Use_promt.format(diff=code),
         config={
             "response_mime_type": "application/json"
         }  
