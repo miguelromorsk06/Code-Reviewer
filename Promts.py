@@ -26,7 +26,6 @@ Formato exacto:
     }}
   ]
 }}
-
 Diff a analizar:
 {diff}"""
 AuditoryPromt="""# ROL
