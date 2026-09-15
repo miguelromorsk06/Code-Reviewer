@@ -1,1 +1,0 @@
-Hacer el Readme, y hacer  que se ejecute desde cualquier proyecto y hacer mejor el promt y en inglés

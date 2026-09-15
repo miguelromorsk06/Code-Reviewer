@@ -227,7 +227,138 @@ GitHub Actions runs the review
         |
         +--> Review fails: merge blocked
 ```
+## Add the reviewer to another repository
 
+To use this reviewer in another GitHub repository, create the following file in the target repository:
+
+```text
+.github/workflows/code-review.yml
+```
+
+Paste this workflow into that file:
+
+```yaml
+name: Code Review
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+  push:
+    branches:
+      - main
+      - master
+
+  workflow_dispatch:
+
+jobs:
+  review:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Check out the repository that will be reviewed.
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      # Download the reviewer from the Code-Reviewer repository.
+      - name: Checkout Code Reviewer
+        uses: actions/checkout@v4
+        with:
+          repository: miguelromorsk06/Code-Reviewer
+          ref: main
+          path: reviewer
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: pip install -r reviewer/requirements.txt
+
+      - name: Run AI Code Review
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          BASE_REF: ${{ github.event.pull_request.base.ref }}
+          DIFF_BASE: ${{ github.event.before }}
+        run: python reviewer/main.py
+```
+
+This workflow is required in every repository where you want to use the
+reviewer. A workflow stored in `Code-Reviewer` is not automatically applied to
+other repositories.
+
+The workflow performs the following actions:
+
+1. Checks out the repository that will be reviewed.
+2. Downloads the `Code-Reviewer` project.
+3. Installs Python 3.11.
+4. Installs the reviewer's dependencies.
+5. Runs the AI code review.
+
+The workflow runs when:
+
+- A pull request is opened.
+- A pull request is updated.
+- A pull request is reopened.
+- A commit is pushed to `main`.
+- A commit is pushed to `master`.
+- The workflow is started manually.
+
+## Configure the Gemini API key
+
+In the target repository, go to:
+
+```text
+Settings → Secrets and variables → Actions
+```
+
+Create a new repository secret with the exact name:
+
+```text
+GEMINI_API_KEY
+```
+
+Paste your Gemini API key as the value.
+
+The `Code-Reviewer` repository must be public so that GitHub Actions can
+download it. If it is private, the checkout step requires a token with read
+access to that repository.
+
+## Recommended Pull Request workflow
+
+GitHub Actions runs after a push has already reached GitHub. Therefore, it
+cannot prevent a direct push to `main` or `master`.
+
+The recommended workflow is:
+
+```text
+Create a working branch
+        ↓
+Push the working branch
+        ↓
+Create a Pull Request
+        ↓
+GitHub Actions runs the review
+        ↓
+Merge only if the required checks pass
+```
+
+To protect the main branch, configure a branch ruleset in:
+
+```text
+Settings → Rules → Rulesets
+```
+
+Enable:
+
+- Require a pull request before merging.
+- Require status checks to pass before merging.
+
+This prevents reviewed code from being merged into `main` or `master` when the
+required GitHub Actions check fails.
 ## Important limitations
 
 - GitHub Actions cannot undo a push that has already happened.
