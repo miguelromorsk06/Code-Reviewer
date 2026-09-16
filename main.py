@@ -10,12 +10,12 @@ from CallGemini import Review_Code
 from TerminalOutput import Show_Comments
 
 def Critical_error(data):
-    comments=data.get("Comments",[])
-    return any(c.get("severidad").lower()=="alta" for c in comments)
+    comments=data.get("comments",[])
+    return any(c.get("severity").lower()=="high" for c in comments)
 def Fast_Mode():
     diff = obtain_diff()
     if not diff.strip():
-        print("No hay cambios en staging (usá 'git add').")
+        print("There is not changes in staging  (use 'git add').")
         return
     
     crude_answer = Review_Code(diff,Fast_promt)
