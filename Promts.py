@@ -15,6 +15,7 @@ Output rules:
 
 Exact format:
 {{
+  "rating": 0,
   "comments": [
     {{
       "file": "file_name.ext",
@@ -23,7 +24,6 @@ Exact format:
       "category": "bug|security|performance|style",
       "explanation": "what is wrong, in one or two sentences",
       "suggestion": "how to fix it, concretely",
-      "Rating of the code": with a numeric rate from 0 to 10"
     }}
   ]
 }}
