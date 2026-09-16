@@ -15,7 +15,7 @@ def Critical_error(data):
 def Fast_Mode():
     diff = obtain_diff()
     if not diff.strip():
-        print("There are not changes in staging  (use 'git add').")
+        print("There are no changes in staging  (use 'git add').")
         return
     
     crude_answer = Review_Code(diff,Fast_promt)
