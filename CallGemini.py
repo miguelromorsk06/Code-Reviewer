@@ -17,7 +17,7 @@ def Review_Code(code,Use_promt):
                 }  
             )
             response = chat.send_message(Use_promt.format(diff=code))
-            return response.text  # dict/list de Python
+            return response.text  
     
 
 
