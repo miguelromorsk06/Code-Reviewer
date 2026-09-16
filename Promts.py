@@ -22,10 +22,12 @@ Exact format:
       "severity": "high|medium|low",
       "category": "bug|security|performance|style",
       "explanation": "what is wrong, in one or two sentences",
-      "suggestion": "how to fix it, concretely"
+      "suggestion": "how to fix it, concretely",
+      "Rating of the code": with a numeric rate from 0 to 10"
     }}
   ]
 }}
+
 Diff to analyze:
 {diff}"""
 
