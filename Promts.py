@@ -8,9 +8,24 @@ Look specifically for:
 
 DO NOT evaluate: general architecture, testing, project documentation, scalability — you do not have enough context for that from a diff alone.
 
+RATING SYSTEM (0-10):
+After identifying all issues, assign an overall "rating" from 0 to 10 reflecting the quality of the code shown in the diff:
+- 10: No issues found. Clean, clear, safe, and efficient code.
+- 8-9: Only minor style/clarity issues (low severity), nothing functional or security-related.
+- 6-7: One or more medium-severity issues (minor bugs, avoidable performance problems), but no security risks or critical bugs.
+- 4-5: At least one high-severity bug or a medium-severity security issue that could cause incorrect behavior but is not critically exploitable.
+- 2-3: A high-severity security vulnerability (e.g. SQL injection, hardcoded secret, XSS) or a critical logic bug that breaks core functionality.
+- 0-1: Multiple high-severity security vulnerabilities and/or critical bugs, or code that is fundamentally broken/unsafe.
+
+Weighting guidance:
+- Security issues weigh more than performance issues.
+- Bugs weigh more than style issues.
+- Base the rating on severity and category of the WORST issues found, not just the count. Several low-severity style comments should not drag the score down much; a single high-severity security issue should drag it down a lot.
+- If "comments" is empty, rating must be 10.
+
 Output rules:
 - Respond ONLY with valid JSON, without additional text, markdown, or backticks.
-- If you do not find any problems, return {{"comments": []}}.
+- If you do not find any problems, return {{"rating": 10, "comments": []}}.
 - Be precise: do not invent problems that are not supported by the code shown.
 
 Exact format:
@@ -23,14 +38,13 @@ Exact format:
       "severity": "high|medium|low",
       "category": "bug|security|performance|style",
       "explanation": "what is wrong, in one or two sentences",
-      "suggestion": "how to fix it, concretely",
+      "suggestion": "how to fix it, concretely"
     }}
   ]
 }}
 
 Diff to analyze:
 {diff}"""
-
 AuditoryPromt="""# ROLE
 
 Act as a Senior Software Engineer with more than 15 years of experience in software development, systems architecture, applied cybersecurity, performance optimization, and maintenance of software in large-scale production environments. Your judgment must be rigorous, impartial, and technically irrefutable.
